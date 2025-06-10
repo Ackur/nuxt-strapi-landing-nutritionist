@@ -1,6 +1,38 @@
+<template>
+  <div class="avatar-group">
+    <img
+      v-for="image in props.images"
+      :key="image.src"
+      :src="mediaUrl + image.url"
+      :width="image.width"
+      :height="image.width"
+      :alt="image.alternativeText"
+      class="avatar-group--item"
+    />
+  </div>
+</template>
+
+<script setup>
+const props = defineProps({
+  images: {
+    type: Array,
+    default: () => [
+      {
+        url: "/images/avatars/avatar-3-50.webp",
+        width: "50",
+        height: "50",
+        alternativeText: "avatar"
+      }
+    ]
+  }
+});
+
+const mediaUrl = useStrapiMedia();
+</script>
+
+<style>
 .avatar-group {
   width: fit-content;
-  /* max-height: 66px; */
   display: flex;
   align-items: center;
   border: 1px solid var(--clr-green-70);
@@ -48,3 +80,4 @@
     z-index: 100;
   }
 }
+</style>

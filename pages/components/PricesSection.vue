@@ -1,11 +1,9 @@
 <template>
   <section class="prices-section app-container">
     <article class="prices-section__heading text-center">
-      <h1 class="app-section-title">Our Pricing</h1>
+      <h1 class="app-section-title">{{ blockContent.title }}</h1>
       <p class="app-section-description">
-        We outline our flexible and affordable options to support you on your journey to optimal
-        health and nutrition. We believe that everyone deserves access to personalized nutrition
-        guidance and resources
+        {{ blockContent.description }}
       </p>
     </article>
     <div class="prices-section__content">
@@ -19,23 +17,22 @@
           <input type="radio" name="toggle" value="yearly" />
         </label>
       </div>
-      <span class="prices-section__content--offer-text">Save 50% on Yearly</span>
+      <span class="prices-section__content--offer-text">{{ blockContent.subtitle }}</span>
       <div class="prices-section__content--cards">
-        <article class="cards-item">
+        <article v-for="plan in blockContent.plans" :key="plan.id" class="cards-item">
           <header class="cards-item__header">
-            <h1 class="cards-item__header--title">Basic Plan</h1>
-            <p class="cards-item__header--tagline">Up to 50% off on Yearly Plan</p>
+            <h1 class="cards-item__header--title">{{ plan.title }}</h1>
+            <p class="cards-item__header--tagline">{{ plan.subtitle }}</p>
           </header>
           <section class="cards-item__content">
             <p class="cards-item__content--description">
-              Get started on your health journey with our Basic Plan. It includes personalized
-              nutrition coaching, access to our app, meal planning assistance, and email support.
+              {{ plan.description }}
             </p>
           </section>
           <div class="cards-item__price">
             <span class="cards-item__price--amount">
-              <span class="monthly">$49</span>
-              <span class="yearly">$294</span>
+              <span class="monthly">${{ plan.monthly }}</span>
+              <span class="yearly">${{ plan.yearly }}</span>
             </span>
             <span class="cards-item__price--period">
               <span class="monthly">/month</span>
@@ -43,59 +40,13 @@
             </span>
           </div>
           <footer class="cards-item__footer">
-            <AppButton type="button" class="cards-item__footer--action"> Choose Plan </AppButton>
-          </footer>
-        </article>
-        <article class="cards-item">
-          <header class="cards-item__header">
-            <h1 class="cards-item__header--title">Premium Plan</h1>
-            <p class="cards-item__header--tagline">Up to 50% off on Yearly Plan</p>
-          </header>
-          <section class="cards-item__content">
-            <p class="cards-item__content--description">
-              Upgrade to our Premium Plan for enhanced features. In addition to the Basic Plan,
-              you'll receive video consultations, priority support, and personalized recipe
-              recommendations.
-            </p>
-          </section>
-          <div class="cards-item__price">
-            <span class="cards-item__price--amount">
-              <span class="monthly">$79</span>
-              <span class="yearly">$474</span>
-            </span>
-            <span class="cards-item__price--period">
-              <span class="monthly">/month</span>
-              <span class="yearly">/year</span>
-            </span>
-          </div>
-          <footer class="cards-item__footer">
-            <AppButton type="button" class="cards-item__footer--action"> Choose Plan </AppButton>
-          </footer>
-        </article>
-        <article class="cards-item">
-          <header class="cards-item__header">
-            <h1 class="cards-item__header--title">Ultimate Plan</h1>
-            <p class="cards-item__header--tagline">Up to 50% off on Yearly Plan</p>
-          </header>
-          <section class="cards-item__content">
-            <p class="cards-item__content--description">
-              Experience the full benefits of personalized nutrition coaching with our Ultimate
-              Plan. Enjoy all the features of the Premium Plan, along with 24/7 chat support and
-              exclusive workshops.
-            </p>
-          </section>
-          <div class="cards-item__price">
-            <span class="cards-item__price--amount">
-              <span class="monthly">$99</span>
-              <span class="yearly">$594</span>
-            </span>
-            <span class="cards-item__price--period">
-              <span class="monthly">/month</span>
-              <span class="yearly">/year</span>
-            </span>
-          </div>
-          <footer class="cards-item__footer">
-            <AppButton type="button" class="cards-item__footer--action"> Choose Plan </AppButton>
+            <AppButton
+              type="button"
+              class="cards-item__footer--action"
+              @click="console.log(plan.title, 'clicked')"
+            >
+              Choose Plan
+            </AppButton>
           </footer>
         </article>
       </div>
@@ -105,4 +56,12 @@
 
 <script setup>
 import AppButton from "~/components/ui/AppButton.vue";
+
+const { findOne } = useStrapi();
+
+const { data } = await useAsyncData("block-pricing-main", () =>
+  findOne("block-pricing-main", { populate: "*" })
+);
+
+const blockContent = computed(() => data.value?.data || {});
 </script>

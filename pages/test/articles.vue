@@ -3,16 +3,17 @@
     <p>categories</p>
     <code>
       <pre>
-          {{ data?.data }}
+          {{ data }}
       </pre>
     </code>
   </div>
 </template>
 
 <script setup>
-const { find } = useStrapi();
+const { find, findOne } = useStrapi();
 
-const { data } = await useAsyncData("categories", () =>
-  find("categories", { sort: ["id:desc"], populate: "*" })
-);
+// const { data } = await useAsyncData("categories", () =>
+//   find("categories", { sort: ["id:desc"], populate: "*" })
+// );
+const { data } = await useAsyncData("hero", () => findOne("hero", { populate: "*" }));
 </script>
