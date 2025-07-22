@@ -1,4 +1,4 @@
-import type { Strapi4Error, Strapi5Error } from "@nuxtjs/strapi";
+import type { Strapi4Error } from "@nuxtjs/strapi";
 
 export default defineNuxtPlugin((nuxt) => {
   nuxt.hook("strapi:error" as any, (e: Strapi4Error) => {

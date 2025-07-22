@@ -26,11 +26,13 @@
           />
         </figure>
         <nav
+          :ref="(el) => (refs.mobileMenu = el)"
           aria-label="Main Navigation"
           data-menu-backdrop
           class="app-navbar__list--wrapper mobile-menu"
+          @click="toggleMobileMenu"
         >
-          <ul class="app-navbar__list">
+          <ul class="app-navbar__list" @click.stop>
             <li class="app-navbar__list--item active">
               <a href="#">Home</a>
             </li>
@@ -55,7 +57,7 @@
           </ul>
         </nav>
 
-        <button class="mobile-menu-button" aria-label="mobile menu">
+        <button class="mobile-menu-button" aria-label="mobile menu" @click="toggleMobileMenu">
           <div class="mobile-menu-button__burger">
             <span class="mobile-menu-button__burger--item" />
             <span class="mobile-menu-button__burger--item" />
@@ -69,4 +71,29 @@
 
 <script setup>
 import AppButton from "~/components/ui/AppButton.vue";
+
+const screenWidth = useScreenWidth();
+
+const refs = reactive({});
+const mobileScreenWidth = "768px";
+
+const isMobileScreenWidth = computed(() => {
+  return screenWidth.value <= parseInt(mobileScreenWidth);
+});
+
+function toggleMobileMenu() {
+  const isActive = refs.mobileMenu.classList.toggle("open");
+
+  if (!isActive) {
+    refs.mobileMenu.classList.add("close");
+  } else {
+    refs.mobileMenu.classList.remove("close");
+  }
+}
+
+watch(isMobileScreenWidth, (newValue) => {
+  if (!newValue) {
+    refs.mobileMenu.classList.remove("open", "close");
+  }
+});
 </script>

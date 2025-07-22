@@ -6,5 +6,16 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   strapi: {
     url: process.env.STRAPI_URL
-  }
+  },
+  pages: {
+    pattern: ["**/*.vue", "!**/components/**"]
+  },
+  components: [
+    "~/components",
+    {
+      path: "~/pages",
+      pattern: "**/components/**",
+      pathPrefix: false
+    }
+  ]
 });
